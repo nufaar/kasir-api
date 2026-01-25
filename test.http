@@ -1,0 +1,28 @@
+GET http://localhost:8080/api/categories HTTP/1.1
+Content-Type: application/json
+
+###
+POST http://localhost:8080/api/categories HTTP/1.1
+Content-Type: application/json
+
+{
+    "nama": "Alat Tulis",
+    "deskripsi": "Kategori alat tulis kantor dan sekolah"
+}
+
+###
+GET http://localhost:8080/api/categories/4 HTTP/1.1
+Content-Type: application/json
+
+###
+PUT http://localhost:8080/api/categories/1 HTTP/1.1
+Content-Type: application/json
+
+{
+    "nama": "Makanan Ringan",
+    "deskripsi": "Kategori makanan ringan dan cemilan"
+}
+
+###
+DELETE http://localhost:8080/api/categories/2 HTTP/1.1
+Content-Type: application/json
