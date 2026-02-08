@@ -16,14 +16,12 @@ import (
 )
 
 type Config struct {
-	Port   string `mapstructure:"PORT"`
-	DBConn string `mapstructure:"DB_CONN"`
+	Port   string `mapstructure:"SERVER_PORT"`
+	DBConn string `mapstructure:"DATABASE_URL"`
 }
 
 func main() {
 	viper.AutomaticEnv()
-	viper.BindEnv("DB_CONN")
-	viper.BindEnv("PORT")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	if _, err := os.Stat(".env"); err == nil {
@@ -32,8 +30,8 @@ func main() {
 	}
 
 	config := Config{
-		Port:   viper.GetString("PORT"),
-		DBConn: viper.GetString("DB_CONN"),
+		Port:   viper.GetString("SERVER_PORT"),
+		DBConn: viper.GetString("DATABASE_URL"),
 	}
 
 	// setup database
