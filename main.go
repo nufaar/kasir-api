@@ -22,6 +22,8 @@ type Config struct {
 
 func main() {
 	viper.AutomaticEnv()
+	viper.BindEnv("DB_CONN")
+	viper.BindEnv("PORT")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	if _, err := os.Stat(".env"); err == nil {
