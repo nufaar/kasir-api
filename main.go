@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -20,23 +21,20 @@ type Config struct {
 }
 
 func main() {
-	v := viper.New()
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	if _, err := os.Stat(".env"); err == nil {
-		v.SetConfigFile(".env")
-		_ = v.ReadInConfig()
+		viper.SetConfigFile(".env")
+		_ = viper.ReadInConfig()
 	}
-
-	v.AutomaticEnv()
 
 	config := Config{
-		Port:   v.GetString("SERVER_PORT"),
-		DBConn: v.GetString("DATABASE_URL"),
-	}
-	if config.DBConn == "" {
-		log.Fatal("DATABASE_URL kosong")
+		Port:   viper.GetString("SERVER_PORT"),
+		DBConn: viper.GetString("DATABASE_URL"),
 	}
 
+	// setup database
 	db, err := database.InitDB(config.DBConn)
 	if err != nil {
 		log.Fatal("Failed to initialize database:", err)
