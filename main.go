@@ -21,6 +21,7 @@ type Config struct {
 }
 
 func main() {
+	log.Println("RAILWAY ENV:", os.Environ())
 	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
