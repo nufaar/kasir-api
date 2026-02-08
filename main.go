@@ -60,11 +60,20 @@ func main() {
 	categoryService := services.NewCategoryService(categoryRepo)
 	categoryHandler := handlers.NewCategoryHandler(categoryService)
 
+	// Transaction
+	transactionRepo := repositories.NewTransactionRepository(db)
+	transactionService := services.NewTransactionService(transactionRepo)
+	transactionHandler := handlers.NewTransactionHandler(transactionService)
+
 	// setup routes
+	// Product
 	http.HandleFunc("/api/produk", productHandler.HandleProducts)
 	http.HandleFunc("/api/produk/", productHandler.HandleProductByID)
+	// Category
 	http.HandleFunc("/api/kategori", categoryHandler.HandleCategories)
 	http.HandleFunc("/api/kategori/", categoryHandler.HandleCategoryByID)
+	// Transaction
+	http.HandleFunc("/api/checkout", transactionHandler.HandleCheckout) // POST
 
 	addr := "0.0.0.0:" + config.Port
 	fmt.Println("Server running di", addr)
