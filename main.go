@@ -21,8 +21,11 @@ type Config struct {
 }
 
 func main() {
-	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	viper.AutomaticEnv()
+
+	viper.BindEnv("SERVER_PORT")
+	viper.BindEnv("DATABASE_URL")
 
 	if _, err := os.Stat(".env"); err == nil {
 		viper.SetConfigFile(".env")
@@ -34,7 +37,10 @@ func main() {
 		DBConn: viper.GetString("DATABASE_URL"),
 	}
 
-	// setup database
+	if config.DBConn == "" {
+		log.Fatal("DATABASE_URL kosong")
+	}
+
 	db, err := database.InitDB(config.DBConn)
 	if err != nil {
 		log.Fatal("Failed to initialize database:", err)
