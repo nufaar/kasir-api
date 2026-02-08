@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -21,22 +20,19 @@ type Config struct {
 }
 
 func main() {
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-	viper.AutomaticEnv()
-
-	viper.BindEnv("SERVER_PORT")
-	viper.BindEnv("DATABASE_URL")
+	v := viper.New()
 
 	if _, err := os.Stat(".env"); err == nil {
-		viper.SetConfigFile(".env")
-		_ = viper.ReadInConfig()
+		v.SetConfigFile(".env")
+		_ = v.ReadInConfig()
 	}
+
+	v.AutomaticEnv()
 
 	config := Config{
-		Port:   viper.GetString("SERVER_PORT"),
-		DBConn: viper.GetString("DATABASE_URL"),
+		Port:   v.GetString("SERVER_PORT"),
+		DBConn: v.GetString("DATABASE_URL"),
 	}
-
 	if config.DBConn == "" {
 		log.Fatal("DATABASE_URL kosong")
 	}
